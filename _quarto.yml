@@ -6,11 +6,11 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "LCA-Work Visa Trends"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+    - Nitanshi Bhardwaj (nb3308)
+    - Vishal Menon (Virtual Machine)
+  repo-url: https://github.com/Nitanshi-Bhardwaj/LCA-Work-Visa-Trends
   date: today
   page-footer:
     right: |
