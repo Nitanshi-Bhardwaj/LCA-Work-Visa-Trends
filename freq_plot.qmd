@@ -1,0 +1,164 @@
+```{r}
+# Data
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(maps)
+```
+
+```{r}
+#reading the data
+lca <- read_excel("LCA_Disclosure_Data_FY2024_Q1.xlsx")
+
+names(lca)
+```
+
+```{r}
+#Frequency of SOCs
+soc_freq <- lca %>%
+  filter(!is.na(SOC_TITLE), SOC_TITLE != "") %>%
+  count(SOC_TITLE, sort = TRUE)
+
+head(soc_freq)
+```
+
+
+```{r}
+#SOC vs Freq
+soc_freq|>
+  slice_max(n, n = 20) |>
+  ggplot(aes(x = reorder(SOC_TITLE, n), y = n)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Frequency of SOC in LCA Data",
+    x = "SOC",
+    y = "Count"
+  ) +
+  theme_minimal()
+```
+
+
+```{r}
+
+# 1. Filter only SOC = "Software Developers"
+software_dev <- lca %>%
+  filter(SOC_TITLE == "Software Developers")
+
+# 2. Get frequency of job titles within this SOC
+job_freq <- software_dev %>%
+  filter(!is.na(JOB_TITLE), JOB_TITLE != "") %>%
+  count(JOB_TITLE, sort = TRUE)
+
+# Optional: peek at top titles
+head(job_freq, 10)
+
+# 3. Bar chart of top 20 job titles in Software Developers SOC
+job_freq |>
+  slice_max(n, n = 20) |>   
+  ggplot(aes(x = reorder(JOB_TITLE, n), y = n)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Top Job Titles within SOC: Software Developers",
+    x = "Job Title",
+    y = "Count"
+  ) +
+  theme_minimal()
+
+```
+
+
+
+```{r}
+# Unique SOC code–title combinations
+soc_table <- lca |>
+  select(SOC_CODE, SOC_TITLE) |>
+  distinct() |>
+  arrange(SOC_CODE)
+
+# View in console
+soc_table
+```
+
+
+
+
+```{r}
+#State vs SOC
+state_counts <- lca |>
+  filter(CASE_STATUS == "Certified",
+         !is.na(WORKSITE_STATE),
+         WORKSITE_STATE != "") |>
+  count(WORKSITE_STATE, name = "n")
+
+head(state_counts)
+```
+
+```{r}
+# Lookup table: 2-letter abbrev -> full state name (lowercase for map_data)
+state_lookup <- data.frame(
+  WORKSITE_STATE = state.abb,
+  region = tolower(state.name),
+  stringsAsFactors = FALSE
+)
+
+state_counts_map <- state_counts |>
+  inner_join(state_lookup, by = "WORKSITE_STATE")
+
+usa_map <- map_data("state")
+
+plot_data <- usa_map |>
+  left_join(state_counts_map, by = "region")
+  
+
+
+state_labels <- plot_data|>
+  group_by(region) |>
+  summarise(
+    long = mean(range(long)),  
+    lat  = mean(range(lat))
+  ) |>
+  left_join(state_lookup, by = "region")   
+  
+
+
+#Choropleth  
+ggplot() +
+ 
+  geom_polygon(
+    data = plot_data,
+    aes(x = long, y = lat, group = group, fill = n),
+    color = "white",
+    linewidth = 0.2
+  ) +
+  
+  geom_text(
+    data = state_labels,
+    aes(x = long, y = lat, label = WORKSITE_STATE),
+    color = "white",
+    size  = 2
+  ) +
+  coord_fixed(1.3) +
+  labs(
+    title = "Number of Certified LCA Cases by State",
+    fill  = "Visa Count",
+    x = NULL,
+    y = NULL
+  ) +
+   scale_fill_gradient(
+    low  = "#c6e5ff",   
+    high = "#003366",   
+    trans = "sqrt"      
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text  = element_blank(),
+    axis.ticks = element_blank()
+  )
+```
+
+
+
+
+

@@ -1,5 +1,2 @@
-# Data
+#Data
 
-## Description
-
-## Missing value analysis
