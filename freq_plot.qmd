@@ -1,3 +1,8 @@
+---
+title: "Freq Plot"
+format: html
+---
+
 ```{r}
 # Data
 library(readxl)
@@ -8,7 +13,7 @@ library(maps)
 
 ```{r}
 #reading the data
-lca <- read_excel("LCA_Disclosure_Data_FY2024_Q1.xlsx")
+lca <- read_excel("data/2024/FY2024_Q1.xlsx")
 
 names(lca)
 ```

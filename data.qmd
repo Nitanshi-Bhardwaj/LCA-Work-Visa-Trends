@@ -1,2 +1,42 @@
 #Data
 
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+lca <- read_excel("data/2024/FY2024_Q1.xlsx")
+
+cols_to_check <- c(
+  "CASE_STATUS", "RECEIVED_DATE", "VISA_CLASS", "FULL_TIME_POSITION",
+  "TOTAL_WORKER_POSITIONS", "JOB_TITLE",
+  "SOC_CODE", "SOC_TITLE",
+  "EMPLOYER_NAME", "EMPLOYER_STATE", "EMPLOYER_CITY",
+  "NAICS_CODE",
+  "WORKSITE_CITY", "WORKSITE_STATE",
+  "WAGE_RATE_OF_PAY_FROM", "WAGE_RATE_OF_PAY_TO", "WAGE_UNIT_OF_PAY",
+  "PREVAILING_WAGE", "PW_UNIT_OF_PAY", "PW_WAGE_LEVEL"
+)
+
+missing_summary <- lca |>
+  select(all_of(cols_to_check)) |>
+  summarise(across(everything(), ~ mean(is.na(.)))) |>
+  pivot_longer(everything(),
+               names_to = "variable",
+               values_to = "prop_missing")
+
+ggplot(missing_summary,
+       aes(x = reorder(variable, prop_missing),
+           y = prop_missing)) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(
+    x = "Variable",
+    y = "Percent missing",
+    title = "Missingness by variable (key columns)"
+  )
+
+
+```
