@@ -15,7 +15,6 @@ library(ggplot2)
 lca <- read_excel("data/2024/FY2024_Q1.xlsx")
 
 # Keep only rows with needed fields
-# (add CASE_STATUS filter here if you want, e.g. CASE_STATUS == "CERTIFIED")
 lca_clean <- lca |>
   filter(
     !is.na(SOC_TITLE),
@@ -24,7 +23,7 @@ lca_clean <- lca |>
   )
 
 # Quick sanity check
-nrow(lca_clean)   # should be > 0
+nrow(lca_clean)
 
 # Top 20 SOC titles in this cleaned data
 top_20_soc_titles <- lca_clean |>
@@ -44,13 +43,12 @@ lca_clean |>
   )) +
   geom_boxplot() +
   coord_flip() +
-  facet_wrap(~ PW_UNIT_OF_PAY) +
+  facet_wrap(~ PW_UNIT_OF_PAY, scales = "free_x") +
   labs(
     x = "SOC title",
     y = "Wage rate of pay (FROM)",
     title = "Wage distribution by SOC (Top 20, faceted by pay unit)"
   )
-
 
 ```
 
