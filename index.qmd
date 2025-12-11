@@ -1,1 +1,17 @@
 # Introduction
+
+The Labor Condition Applications (LCAs) for VISA types like **H-1B**, **H-1B1**, **E-3** etc; are released quarterly by the US Department of Labor; the data disclosed includes application details like wage, occupation, and work-site details, etc. We plan to use the latest public disclosures in recent years to explore trends and patterns in work VISA applications.
+
+Therefore, in this project we will perform an analysis of the data released over the recent years, with a primary focus on H-1B applications. Through these experiments we aim to explore geographic, occupational, temporal, and employer-level patterns in certified and denied applications.
+
+## Research questions
+
+1.  **Geography:** In America, which CBSAs (Core-Based Statistical Area-urban core and the surrounding counties that commute into it) account for the largest shares of certified/approved applications?
+
+2.  **Wages by SOC:** How are the wage values distributed across various SOC occupations (Standard Occupational Classification) \[Eg, 15-1250 Software Developers vs 17-2010 Engineers\]?
+
+3.  **Time patterns:** What do the monthly trends/patterns of certifications vs denials look like across years, months with higher approval/rejection rates, etc?
+
+4.  **Employer concentration:** How concentrated are the total filings among the top US employers for selected metros or SOCs?
+
+5.  **Process flow:** Timeline/flow of the application process through alluvial plots?

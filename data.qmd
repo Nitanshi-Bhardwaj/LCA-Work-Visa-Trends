@@ -100,7 +100,6 @@ summary_data <- all_data %>%
   summarise(COUNT = n(), .groups = "drop")
 
 ```
-```
 
 
 ```{r}
