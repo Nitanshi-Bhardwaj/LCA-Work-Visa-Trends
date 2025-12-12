@@ -24,11 +24,9 @@ read_status_only <- function(file_path, year) {
 }
 
 # Read 2019 data
-cat("Loading 2019 data...\n")
 df_2019 <- read_status_only("data/2019/FY2019.xlsx", 2019)
 
 # Read 2020 data
-cat("Loading 2020 data...\n")
 df_2020_q1 <- read_status_only("data/2020/FY2020_Q1.xlsx", 2020)
 df_2020_q2 <- read_status_only("data/2020/FY2020_Q2.xlsx", 2020)
 df_2020_q3 <- read_status_only("data/2020/FY2020_Q3.xlsx", 2020)
@@ -38,7 +36,6 @@ rm(df_2020_q1, df_2020_q2, df_2020_q3, df_2020_q4)
 gc()
 
 # Read 2021 data
-cat("Loading 2021 data...\n")
 df_2021_q1 <- read_status_only("data/2021/FY2021_Q1.xlsx", 2021)
 df_2021_q2 <- read_status_only("data/2021/FY2021_Q2.xlsx", 2021)
 df_2021_q3 <- read_status_only("data/2021/FY2021_Q3.xlsx", 2021)
@@ -48,7 +45,6 @@ rm(df_2021_q1, df_2021_q2, df_2021_q3, df_2021_q4)
 gc()
 
 # Read 2022 data
-cat("Loading 2022 data...\n")
 df_2022_q1 <- read_status_only("data/2022/FY2022_Q1.xlsx", 2022)
 df_2022_q2 <- read_status_only("data/2022/FY2022_Q2.xlsx", 2022)
 df_2022_q3 <- read_status_only("data/2022/FY2022_Q3.xlsx", 2022)
@@ -58,7 +54,6 @@ rm(df_2022_q1, df_2022_q2, df_2022_q3, df_2022_q4)
 gc()
 
 # Read 2023 data
-cat("Loading 2023 data...\n")
 df_2023_q1 <- read_status_only("data/2023/FY2023_Q1.xlsx", 2023)
 df_2023_q2 <- read_status_only("data/2023/FY2023_Q2.xlsx", 2023)
 df_2023_q3 <- read_status_only("data/2023/FY2023_Q3.xlsx", 2023)
@@ -68,7 +63,6 @@ rm(df_2023_q1, df_2023_q2, df_2023_q3, df_2023_q4)
 gc()
 
 # Read 2024 data
-cat("Loading 2024 data...\n")
 df_2024_q1 <- read_status_only("data/2024/FY2024_Q1.xlsx", 2024)
 df_2024_q2 <- read_status_only("data/2024/FY2024_Q2.xlsx", 2024)
 df_2024_q3 <- read_status_only("data/2024/FY2024_Q3.xlsx", 2024)
@@ -79,7 +73,6 @@ gc()
 
 
 # Combine all years
-cat("Combining all years...\n")
 all_data <- bind_rows(df_2019, df_2020, df_2021, df_2022, df_2023, df_2024)
 
 # Clear individual year dataframes
