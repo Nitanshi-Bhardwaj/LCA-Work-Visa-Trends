@@ -1,4 +1,7 @@
-#Data
+---
+title: "Data Analysis"
+format: html
+---
 The project aims at an in-depth analysis of Labor Condition Application (LCA) datasets covering U.S. work visas for the years 2019 to 2024. The primary datasets that contain the disclosures consist of 90+ variables for each case including but not limited to the employer, the occupation, the location and the wage. As far as visualization is concerned, we will particularly deal with the statuses of the cases over the course of time, thus getting the CASE_STATUS attribute from every quarterly file (Q1-Q4) and attributing each record with the respective year. The detailed statuses will then be collapsed into broader categories thus treating “Certified” and “Certified – Withdrawn” as the accepted cases and “Denied” and “Withdrawn” as the rejected ones, in order to find out how the approval and denial patterns have shifted over the years. 
 
 
