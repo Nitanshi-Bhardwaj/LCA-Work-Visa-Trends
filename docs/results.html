@@ -154,7 +154,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load required libraries</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -496,6 +496,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>The wage distribution plot indicates that, after removing extreme outliers, wages for the top 20 SOC titles are grouped closely together. Most of the annual salaries are within a similar mid-to-upper range, showing only slight differences between higher- and lower-paid jobs. However, within each SOC, the boxes and whiskers are relatively tall which means that there is significant variability within occupations and workers in the same job category can earn different amounts, even when using the same pay unit. Comparing hourly and yearly income shows that the overall ranking of jobs remains generally the same across pay units. However, the hourly panel has slightly less variation.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -796,6 +797,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>The map shows that most states have very high certification rates for Software Developer LCAs (generally above 90%), especially major tech states like CA, WA, TX, and NY. A small number of states fall into lower bands (below about 85–90%), indicating that denials are relatively uncommon for this occupation in most of the country. Only South Dakota (about 70–80%) and North Dakota (below 70%) stand out with noticeably lower certification rates.</p>
 </section>
 <section id="state-wise-wage-distribution-analysis" class="level3" data-number="3.3.4">
 <h3 data-number="3.3.4" class="anchored" data-anchor-id="state-wise-wage-distribution-analysis"><span class="header-section-number">3.3.4</span> State-wise Wage Distribution Analysis</h3>
@@ -933,6 +935,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>The alluvial diagram shows how non-certified cases for the top Software Developer job titles flow through wage levels to final outcomes. Most of these cases are filed at prevailing wage level II, with smaller shares at levels I and III; level III is more common for senior titles such as Senior Software Engineer. Across wage levels, the predominant outcome is “Certified – Withdrawn”, while outright denials and withdrawals are relatively rare, indicating that most problematic cases for these titles are not rejected by the agency but instead withdrawn after certification or during processing.</p>
 </section>
 </section>
 <section id="model-analysis" class="level2" data-number="3.4">
@@ -1033,6 +1036,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>The decision tree models the probability that an LCA is certified using only a few discrete predictors: SOC major group, grouped worksite state, prevailing wage level, and full-time status. The root node already reflects the strong imbalance in the data, with roughly 90% of cases certified overall, so most terminal nodes also have high certification probabilities. The first splits show that certification is especially likely for certain SOC clusters filed in CA, NY, NJ, TX or WA and at standard wage levels (I or IV), where the predicted certification rate is typically above 90–95%. Lower certification probabilities appear only in small subgroups—mainly some non-tech SOC groups in “Other” states or records with non-standard/unknown wage levels—indicating that, conditional on these features, denial remains relatively rare.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1092,6 +1096,7 @@ Predicted   No  Yes
 </div>
 </div>
 </div>
+<p>The plot shows feature-importance of predictors used by the decision tree. It is evident that the SOC major group (soc_major) is the most influential predictor of whether an LCA is certified. Next is the worksite location (state_group), followed by the prevailing wage level (wage_level). The full-time indicator (full_time) has very low importance. This suggests that, in this model, the type of occupation and its location matter much more for certification outcomes than whether the position is classified as full-time.</p>
 
 
 </section>
@@ -1498,8 +1503,8 @@ Predicted   No  Yes
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./data.html" class="pagination-link" aria-label="Load required libraries">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load required libraries</span></span>
+      <a href="./data.html" class="pagination-link" aria-label="Data Analysis">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
