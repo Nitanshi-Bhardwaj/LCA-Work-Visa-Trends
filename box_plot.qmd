@@ -1,0 +1,60 @@
+---
+title: "Box Plot"
+format: html
+---
+
+
+```{r}
+#| fig-width: 20
+#| fig-height: 50
+library(readxl)
+library(dplyr)
+library(ggplot2)
+
+# Read data
+lca <- read_excel("data/2024/FY2024_Q1.xlsx")
+
+# Keep only rows with needed fields
+lca_clean <- lca |>
+  filter(
+    !is.na(SOC_TITLE),
+    !is.na(WAGE_RATE_OF_PAY_FROM),
+    !is.na(PW_UNIT_OF_PAY)
+  )
+
+# Quick sanity check
+nrow(lca_clean)
+
+# Top 20 SOC titles in this cleaned data
+top_20_soc_titles <- lca_clean |>
+  count(SOC_TITLE, sort = TRUE) |>
+  slice_head(n = 20) |>
+  pull(SOC_TITLE)
+
+# Boxplot for top 20 SOC titles, faceted by pay unit
+lca_clean |>
+  filter(SOC_TITLE %in% top_20_soc_titles) |>
+  group_by(SOC_TITLE, PW_UNIT_OF_PAY) |>
+  filter(n() >= 50) |>
+  ungroup() |>
+  ggplot(aes(
+    x = reorder(SOC_TITLE, WAGE_RATE_OF_PAY_FROM, FUN = median),
+    y = WAGE_RATE_OF_PAY_FROM
+  )) +
+  geom_boxplot() +
+  coord_flip() +
+  facet_wrap(~ PW_UNIT_OF_PAY, scales = "free_x") +
+  labs(
+    x = "SOC title",
+    y = "Wage rate of pay (FROM)",
+    title = "Wage distribution by SOC (Top 20, faceted by pay unit)"
+  )
+
+```
+
+```{r}
+lca_clean |>
+  filter(SOC_TITLE %in% top_20_soc_titles) |>
+  count(PW_UNIT_OF_PAY)
+
+```
