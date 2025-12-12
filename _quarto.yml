@@ -4,6 +4,9 @@ project:
 
 execute:
   echo: true
+  warning: false
+  message: false
+
 
 book:
   title: "LCA-Work Visa Trends"
@@ -19,9 +22,6 @@ book:
   chapters:
     - index.qmd
     - data.qmd
-    - start.qmd
-    - freq_plot.qmd
-    - box_plot.qmd
     - results.qmd
     - conclusion.qmd
 

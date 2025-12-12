@@ -1,4 +1,6 @@
 #Data
+The project aims at an in-depth analysis of Labor Condition Application (LCA) datasets covering U.S. work visas for the years 2019 to 2024. The primary datasets that contain the disclosures consist of 90+ variables for each case including but not limited to the employer, the occupation, the location and the wage. As far as visualization is concerned, we will particularly deal with the statuses of the cases over the course of time, thus getting the CASE_STATUS attribute from every quarterly file (Q1-Q4) and attributing each record with the respective year. The detailed statuses will then be collapsed into broader categories thus treating “Certified” and “Certified – Withdrawn” as the accepted cases and “Denied” and “Withdrawn” as the rejected ones, in order to find out how the approval and denial patterns have shifted over the years. 
+
 
 ```{r}
 # Load required libraries
@@ -101,12 +103,103 @@ summary_data <- all_data %>%
 
 ```
 
+```{r}
+# Categorize case status into Accepted/Rejected
+all_data <- all_data %>%
+  mutate(STATUS_CATEGORY = case_when(
+    CASE_STATUS %in% c("Certified", "Certified - Withdrawn", "CERTIFIED", "CERTIFIED-WITHDRAWN") ~ "Accepted",
+    CASE_STATUS %in% c("Denied", "Withdrawn", "DENIED", "WITHDRAWN") ~ "Rejected",
+    TRUE ~ "Other"
+  ))
+
+# Create summary by year and status
+summary_data <- all_data %>%
+  filter(STATUS_CATEGORY %in% c("Accepted", "Rejected")) %>%
+  group_by(YEAR, STATUS_CATEGORY) %>%
+  summarise(COUNT = n(), .groups = "drop")
+# Print summary
+print(all_data)
+print(summary_data)
+
+# Create frequency histogram
+ggplot(summary_data, aes(x = factor(YEAR), y = COUNT, fill = STATUS_CATEGORY)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = scales::comma(COUNT)), 
+            position = position_dodge(width = 0.7), 
+            vjust = -0.5, 
+            size = 3.5) +
+  scale_fill_manual(values = c("Accepted" = "#2ecc71", "Rejected" = "#e74c3c"),
+                    name = "Status") +
+  scale_y_continuous(labels = scales::comma, 
+                     expand = expansion(mult = c(0, 0.1))) +
+  labs(title = "H-1B Visa Filing Status by Year",
+       subtitle = "Frequency of Accepted vs Rejected Applications (FY 2019-2024)",
+       x = "Fiscal Year",
+       y = "Number of Applications",
+       caption = "Data Source: H-1B Disclosure Data") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5, color = "gray40"),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 10),
+    legend.position = "top",
+    legend.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank()
+  )
+
+# Create additional percentage view
+summary_data_pct <- summary_data %>%
+  group_by(YEAR) %>%
+  mutate(PERCENTAGE = COUNT / sum(COUNT) * 100)
+
+# Print acceptance rates by year
+acceptance_rates <- summary_data_pct %>%
+  filter(STATUS_CATEGORY == "Accepted") %>%
+  select(YEAR, PERCENTAGE) %>%
+  mutate(PERCENTAGE = round(PERCENTAGE, 2))
+
+cat("\nAcceptance Rates by Year:\n")
+print(acceptance_rates)
+
+# Create stacked percentage bar chart
+ggplot(summary_data_pct, aes(x = factor(YEAR), y = PERCENTAGE, fill = STATUS_CATEGORY)) +
+  geom_bar(stat = "identity", width = 0.7) +
+  geom_text(aes(label = paste0(round(PERCENTAGE, 1), "%")), 
+            position = position_stack(vjust = 0.5), 
+            size = 4, 
+            color = "white",
+            fontface = "bold") +
+  scale_fill_manual(values = c("Accepted" = "#2ecc71", "Rejected" = "#e74c3c"),
+                    name = "Status") +
+  labs(title = "H-1B Visa Acceptance Rate by Year",
+       subtitle = "Percentage Distribution (FY 2019-2024)",
+       x = "Fiscal Year",
+       y = "Percentage (%)",
+       caption = "Data Source: H-1B Disclosure Data") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5, color = "gray40"),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 10),
+    legend.position = "top",
+    legend.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank()
+  )
+
+```
+
+The analysis showed relatively stable volumes in most years, with accepted applications typically in the 550,000–650,000 range and rejected applications forming only a small fraction of the total. A notable aspect of the data is a prominent spike in accepted filings in FY 2021, where the count rises to more than 800,000 cases. This feature aligns with two well-documented contextual factors which are a rebound in employer demand following the initial COVID-19 hiring slowdown in 2020, and the introduction of the electronic H-1B registration system for the FY 2021 cap season, which reduced initial filing costs and made it easier for employers to submit registrations. 
+
+
+
 
 ```{r}
-library(readxl)
-library(dplyr)
 library(tidyr)
-library(ggplot2)
+
 
 lca <- read_excel("data/2024/FY2024_Q4.xlsx")
 
@@ -142,3 +235,6 @@ ggplot(missing_summary,
 
 
 ```
+
+
+The plot visualising missing data for FY2024 Q4 shows that almost all of our key variables have no missing data for fields such as CASE_STATUS, employer and worksite location, SOC codes/titles, and most wage‐related variables. The main exceptions are WAGE_RATE_OF_PAY_TO, which has a noticable proportion of missing values, and PW_WAGE_LEVEL, which has a smaller but still significant amount of missingness. Because WAGE_RATE_OF_PAY_TO is often blank when a single wage value is reported, we focus primarily on WAGE_RATE_OF_PAY_FROM for our wage analyses.
