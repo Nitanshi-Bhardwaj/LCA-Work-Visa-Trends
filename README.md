@@ -1,64 +1,49 @@
-This repo contains a [Quarto book](https://quarto.org/docs/books/) template for the EDAV final project.
+# LCA Visa Applications – Exploratory Analysis (2019–2024)
 
-## Follow these instructions carefully
+This repository contains an exploratory data analysis of U.S. Labor Condition Application (LCA) disclosures for H-1B and related work visas from FY 2019–2024.  
+The project focuses on understanding **where**, **for which occupations**, and **at what wage levels** LCAs are filed and certified.
 
-*If you have any difficulties or have feedback of any kind, please [file an issue](https://github.com/jtr13/quarto-edav-template/issues) or ask questions in the [Discussions](https://github.com/jtr13/quarto-edav-template/discussions) section.*
+---
 
-[Video tutorial](https://www.youtube.com/watch?v=emgS2JI4jCk) (walkthrough of steps below)
+## Goals & Research Questions
 
-### Copy this template (GitHub)
+The analysis is organized around the following questions:
 
-- [ ] 1. Click the green "Use this template" button above and choose "Create a new repository". If you don't see the "Use this template" option, **log in to GitHub**. DO NOT FORK THE REPO. Choose a descriptive name for your repo, such as "federalbudget" or "AIDSdeaths". (If you change your topic before you do any work, delete the repo and start over.)
+1. **Geography**
+   - Which states and metros account for the largest shares of **certified** applications?
+   - How do certification rates for key occupations (e.g., Software Developers) vary by state?
 
-- [ ] 2. Leave the setting for viewing the repo as "Public". (Otherwise, we will not be able to access your rendered book.)
+2. **Wages by SOC**
+   - How are wage offers distributed across major SOC occupations?
+   - How do wages differ by pay unit (hourly vs yearly) and across states?
 
-- [ ] 3. In the Description field, write "Source files for final project" then click "Create repository".
+3. **Time Patterns**
+   - How do accepted vs rejected LCAs evolve from 2019–2024?
+   - What explains the spike in applications around FY 2021?
 
-### Set up Pages (GitHub)
+4. **Employer & Occupational Patterns**
+   - How concentrated are filings among a small set of employers or occupations?
+   - How do job titles, wage levels, and outcomes connect (e.g., via alluvial plots)?
 
-- [ ] 1. You've now left the template page and are viewing your new repo on GitHub. On the home page, click Settings. Click the "Pages" section on the left. In the Build and Deployment section, set Source to "Deploy from a branch" (Classic Pages experience) and Branch to main with /docs folder. Click Save.
+5. **Process & Prediction**
+   - Which factors (SOC group, location, wage level, full-time status) are most predictive of certification?
+   - What does a simple decision-tree model reveal about the structure of approvals?
 
-- [ ] 2. Click the little gear button near "About" on the top right side of the home page of the repo and check the "Use your Github Pages website" box under "Website". Click "Save changes". Test the link and you should see a web site with a stick figure on it. It may take a few minutes to build so if it's not working do a few more steps and then come back to check.
+---
 
-### Copy the repo link (GitHub)
+## Data
 
-- [ ] 1. Click the green Code button, choose "HTTPS" and copy the link below. It should have the format: https&#xfeff;://github.com/[USERNAME]/[REPONAME].git
+- **Source:** Public LCA disclosure data released by the U.S. Department of Labor (OFLC).  
+- **Coverage:** FY **2019–2024**, using quarterly files (Q1–Q4 where applicable).
+- **Key variables used:**
+  - `CASE_STATUS`, `RECEIVED_DATE`, `DECISION_DATE`
+  - `SOC_CODE`, `SOC_TITLE`, `JOB_TITLE`
+  - `EMPLOYER_NAME`, `EMPLOYER_STATE`, `EMPLOYER_CITY`
+  - `WORKSITE_STATE`, `WORKSITE_CITY`
+  - `WAGE_RATE_OF_PAY_FROM`, `WAGE_RATE_OF_PAY_TO`, `WAGE_UNIT_OF_PAY`
+  - `PREVAILING_WAGE`, `PW_UNIT_OF_PAY`, `PW_WAGE_LEVEL`
+  - `FULL_TIME_POSITION`
 
-### Clone the repo (RStudio)
-
-- [ ] 1. Clone your new repo with *File, New Project..., Version Control, Git* in RStudio. You will need to paste the link from the previous step in the Repository URL box. If it's not automatically populated, enter the repo name in the "Project directory name:" box. Choose the location of the project.
-
-### Edit `_quarto.yml` (RStudio)
-
-Tip: From the file pane in RStudio, open `README.md`, which contains these instructions. You can delete steps as you complete them.
-
-- [ ] 1. Change the all caps info in the `title:`, `author:` and `repo-url` fields in the YAML (top) section of `_quarto.yml` to your info. (Note: it's very important to maintain the indenting structure in this file precisely as is -- be careful!)
-
-### Render the book (RStudio)
-
-- [ ] 1. If you haven't already, click "Help" "Check for Updates" to make sure you have the latest version of RStudio (and thus have Quarto installed.)
-
-- [ ] 2. Render the web site locally by clicking the "Build" tap on the right and then "Render Book".
-
-- [ ] 3. Use `browseURL("docs/index.html")` to view your book locally (or just open `docs/index.html` in a browser).
-
-- [ ] 4. If it looks good, commit and push all changed files to GitHub.
-      
-- [ ] 5. Check that the rendered site looks correct on GitHub and that the links back to GitHub (icon on top left, edit this page / report an issue on right) work properly. Note that there is a delay between the time you push the files and when they show up on your sitel You can check the progress by clicking the Actions tab.
-
-(You will need to repeat steps 2 and 4 every time you wish to update the book on GitHub Pages.)
-
-### Update README (GitHub or RStudio)
-
-- [ ] 1. Delete the content of this **README** and add a short description of your project in its place. If you're working locally, be sure to commit and push the changes to GitHub.
-
-### Optional
-
-- [ ] 1. Choose a theme from [https://bootswatch.com/](https://bootswatch.com/) and replace "cosmo" in `_quarto.yml` with your prefered theme.
-
-### Additional features
-
-Please consult the official guide to **quarto** book websites: [https://quarto.org/docs/books/](https://quarto.org/docs/books/)
-
-
+A light data-quality check is performed (missingness by variable, basic filtering of empty strings and NAs).  
+For several visualizations, outliers in wage distributions are removed using an IQR rule.
 
